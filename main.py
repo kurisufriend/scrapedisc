@@ -1,5 +1,5 @@
 API_TOKEN: str = "" # bot token
-FILTER_TEXT: list = ["https", "is a level"] # a list of strings to match for message exclusion
+FILTER_TEXT: list = ["https", "is a level", "historytest"] # a list of strings to match for message exclusion
 
 import os
 import discord
@@ -16,18 +16,22 @@ if (not(os.path.isdir(outputDirPath))):
     print("output directory not found, creating it now")
     os.mkdir(outputDirPath)
 
-outputFile: io.TextIOWrapper = open(outputDirPath + "/output.txt", "a")
+outputFile: io.TextIOWrapper = io.open(outputDirPath + "/output.txt", "a", encoding="utf-8")
 
 @discordClient.event
 async def on_message(message: discord.Message):
     if ("$historytest" in message.content):
-        channel: discord.TextChannel = message.channel
-        messageList: list = await channel.history(oldest_first=True).flatten()
+        channel: discord.TextChannel = message.channel; print("cp1")
+        messageList: list = await channel.history(limit=100000, oldest_first=True).flatten(); print("cp2")
         for currentMessage in messageList:
             messageText: str = currentMessage.content
+            shouldSkip: bool = False # doing like this hurts me but im too brainlet to reset two loops
             for keyword in FILTER_TEXT:
                 if (keyword in messageText.lower()):
-                    continue
+                    shouldSkip = True
+                    break
+            if (shouldSkip):
+                continue
             outputFile.write(messageText + "\n")
             print(messageText + "\n")
         outputFile.close()
