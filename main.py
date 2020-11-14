@@ -1,4 +1,4 @@
-API_TOKEN: str = "Nzc3MDM3NzQ0NTA5NjgxNjY1.X69myg.rIJE625KrgjUxgfn7BuoezJsEuQ" # bot token
+API_TOKEN: str = "" # bot token
 FILTER_TEXT: list = ["https", "is a level"] # a list of strings to match for message exclusion
 
 import os
